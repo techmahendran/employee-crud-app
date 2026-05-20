@@ -52,7 +52,7 @@ const RecordTable = () => {
       <div className="bg-white rounded-2xl shadow-md max-w-7xl mx-auto overflow-hidden">
         {/* Responsive Wrapper */}
         <div className="w-full overflow-x-auto">
-          <table className="w-full min-w-225">
+          <table className="w-full min-w-100 md:min-w-full">
             {/* Header */}
             <thead className="bg-slate-100">
               <tr>
@@ -86,11 +86,14 @@ const RecordTable = () => {
             <tbody className="divide-y divide-gray-200 bg-white">
               {storedRecords.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="px-6 py-14 text-center text-gray-500 text-sm bg-slate-50"
-                  >
-                    No Record Found
+                  <td colSpan={6} className="h-48 sm:h-64 bg-slate-50">
+                    <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                      <p className="text-base font-medium">No Record Found</p>
+
+                      <p className="text-sm text-gray-400 mt-1">
+                        Add a new record to get started
+                      </p>
+                    </div>
                   </td>
                 </tr>
               ) : (

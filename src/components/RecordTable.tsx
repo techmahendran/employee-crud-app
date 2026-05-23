@@ -14,6 +14,8 @@ import { useState } from "react";
 import RecordModel from "./RecordModel";
 import type { EmployeeRecord } from "../types/employee";
 
+import toast from "react-hot-toast";
+
 const RecordTable = () => {
   const dispatch = useDispatch();
 
@@ -34,6 +36,9 @@ const RecordTable = () => {
   const openEditModel = (record: EmployeeRecord) => {
     setSelectedRecord(record);
     setOpen(true);
+
+    // EDIT TOAST
+    toast.success("Edit mode opened");
   };
 
   // Close Modal
@@ -43,8 +48,39 @@ const RecordTable = () => {
   };
 
   // Delete
-  const handleDelete = (id: number) => {
-    dispatch(deleteRecord(id));
+  const handleDelete = (id: number, record: EmployeeRecord) => {
+    toast((t) => (
+      <div className="flex flex-col gap-3 p-1">
+        <span className="text-sm font-medium text-gray-700">
+          Are you sure want to delete{" "}
+          <span className="font-bold text-red-500">{record.name}</span>?
+        </span>
+
+        <div className="flex items-center justify-end gap-2">
+          {/* Cancel Button */}
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-1.5 rounded-lg border border-gray-300 text-sm hover:bg-gray-100 transition"
+          >
+            Cancel
+          </button>
+
+          {/* Delete Button */}
+          <button
+            onClick={() => {
+              dispatch(deleteRecord(id));
+
+              toast.dismiss(t.id);
+
+              toast.success("Record deleted successfully");
+            }}
+            className="px-4 py-1.5 rounded-lg bg-red-500 text-white text-sm hover:bg-red-600 transition"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    ));
   };
 
   return (
@@ -172,7 +208,7 @@ const RecordTable = () => {
                           color="error"
                           size="small"
                           startIcon={<Trash2 size={15} />}
-                          onClick={() => handleDelete(record.id)}
+                          onClick={() => handleDelete(record.id, record)}
                           sx={{
                             textTransform: "none",
                             borderRadius: "10px",

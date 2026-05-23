@@ -9,6 +9,7 @@ import {
   selectAllRecords,
   updateRecord,
 } from "../store/recordSlice";
+import toast from "react-hot-toast";
 
 type RecordModelProps = {
   open: boolean;
@@ -74,36 +75,41 @@ const RecordModel = ({ open, handleClose, editData }: RecordModelProps) => {
   const dispatch = useDispatch();
   const allRecords = useSelector(selectAllRecords);
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    // EDIT
-    if (editData) {
-      dispatch(
-        updateRecord({
-          id: editData.id,
-          ...data,
-        }),
-      );
-    }
+ const onSubmit: SubmitHandler<FormValues> = (data) => {
+  // EDIT
+  if (editData) {
+    dispatch(
+      updateRecord({
+        id: editData.id,
+        ...data,
+      }),
+    );
 
-    // ADD
-    else {
-      const newId =
-        allRecords.length > 0
-          ? Math.max(...allRecords.map((r: EmployeeRecord) => r.id)) + 1
-          : 1;
+    toast.success("Record updated successfully");
+  }
 
-      dispatch(
-        addRecord({
-          id: newId,
-          ...data,
-        }),
-      );
-    }
+  // ADD
+  else {
+    const newId =
+      allRecords.length > 0
+        ? Math.max(...allRecords.map((r: EmployeeRecord) => r.id)) + 1
+        : 1;
 
-    reset();
+    dispatch(
+      addRecord({
+        id: newId,
+        ...data,
+      }),
+    );
 
-    handleClose();
+    toast.success("Record added successfully");
+  }
+
+  reset();
+
+  handleClose();
   };
+
   return (
     <Modal
       open={open}
